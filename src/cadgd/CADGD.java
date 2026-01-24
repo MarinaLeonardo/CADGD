@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import jdk.internal.org.objectweb.asm.Type;
 import pojosgd.*;
 
 /**
@@ -35,7 +36,7 @@ public class CADGD {
     private void conectarBD() throws ExcepcionGD {
         try {
             //this.conexion = DriverManager.getConnection("jdbc:oracle:thin:@172.16.210.1:1521:TEST", "GODSBATTLE", "kk"); //--> CLASE
-            this.conexion = DriverManager.getConnection("jdbc:oracle:thin:@198.168.16.210:1521:test", "GB", "kk"); //--> CASA
+            this.conexion = DriverManager.getConnection("jdbc:oracle:thin:@192.168.18.210:1521:test", "GD", "kk"); //--> CASA
             
         } catch (SQLException ex) {
             ExcepcionGD e = new ExcepcionGD();
@@ -88,7 +89,7 @@ public class CADGD {
             exHR.setCodigoErrorBD(ex.getErrorCode());
             exHR.setMensajeErrorBD(ex.getMessage());
             exHR.setSentenciaSQL(dml);
-            exHR.setMensajeErrorUsuario("Error general del sistema. Consulte con el administrador");
+            exHR.setMensajeErrorUsuario("Error general del sistema. Consulte con el administrador.");
             throw exHR;
         }
 
@@ -130,13 +131,16 @@ public class CADGD {
 
             switch (ex.getErrorCode()) {
                case 2290:
-                    e.setMensajeErrorUsuario("La vida maxima, el daño base, la defensa base y el dinero no pueden ser negativos");
+                    e.setMensajeErrorUsuario("La vida maxima, el daño base, la defensa base y el dinero no pueden ser negativos.");
                     break;
                 case 2291:
                     e.setMensajeErrorUsuario("El usuario, el arma, la armadura o el piso no existen.");
                     break;
                 case 1407:
-                    e.setMensajeErrorUsuario("Todos los campos son obligatorios excepto el arma y la armadura");
+                    e.setMensajeErrorUsuario("Todos los campos son obligatorios excepto el arma y la armadura.");
+                    break;
+                case 1:
+                    e.setMensajeErrorUsuario("Este usuario ya tiene vinculado el mismo objeto, no se permite tener los objetos duplicados.");
                     break;
                 default:
                     e.setMensajeErrorUsuario("Error general del sistema. Consulte con el admiinistrador.");
@@ -146,6 +150,56 @@ public class CADGD {
         return registrosAfectados;
     }
     
+    
+    //Personajeobjeto
+    public Integer insertarPersonajeObjeto(Personajeobjeto personajeObjeto) throws ExcepcionGD {
+        conectarBD();
+        int registrosAfectados = 0;
+        String dml = "insert into PERSONAJEOBJETO (ID_USUARIO, ID_OBJETO, USOS_RESTANTES) values (?,?,?)";
+
+        try {
+            PreparedStatement sentencia = conexion.prepareStatement(dml);
+
+            sentencia.setObject(1, personajeObjeto.getPersonajeObjetoIdUsuario().getPersonajeIdUsuario().getUsuarioIdUsuario(), java.sql.Types.INTEGER);
+            sentencia.setObject(2, personajeObjeto.getPersonajeObjetoIdObjeto().getObjetoIdObjeto(), java.sql.Types.INTEGER);
+            sentencia.setObject(3, personajeObjeto.getPersonajeObjetoUsosRestantes(), java.sql.Types.INTEGER);
+           
+            registrosAfectados = sentencia.executeUpdate();
+
+            sentencia.close();
+            conexion.close();
+
+        } catch (SQLException ex) {
+            ExcepcionGD e = new ExcepcionGD();
+
+            e.setCodigoErrorBD(ex.getErrorCode());
+            e.setMensajeErrorBD(ex.getMessage());
+            e.setSentenciaSQL(dml);
+            
+            switch (ex.getErrorCode()) {
+                case 2290: 
+                    e.setMensajeErrorUsuario("Los usos restantes no pueden ser menores que 0.");
+                    break;
+                case 2291:
+                    e.setMensajeErrorUsuario("El objeto o el usuario seleccionados no existen.");
+                    break;
+                    
+                case 1407:
+                    e.setMensajeErrorUsuario("Todos los campos son obligatorios.");
+                    break;
+                default:
+                    e.setMensajeErrorUsuario("Error general del sistema. Consulte con el administrador.");
+                    break;
+            }
+
+            throw e;
+        } catch (Exception e) {
+            System.out.println(e);
+
+        }
+
+        return registrosAfectados;
+    }
     
     
     
