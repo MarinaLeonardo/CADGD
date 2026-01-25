@@ -53,10 +53,10 @@ public class Main
             CADGD cad = new CADGD();
 
 //            System.out.println(cad.leerHabilidad(1));
-            System.out.println(cad.ModificarPersonaje(1, p));
+            //System.out.println(cad.ModificarPersonaje(1, p));
 //            System.out.println(cad.insertarPersonajeObjeto(po));
             
-            
+            System.out.println(cad.eliminarPersonaje(1));
             
             
         } catch (ExcepcionGD ex) {

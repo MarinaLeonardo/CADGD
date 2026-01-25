@@ -63,7 +63,7 @@ public class CADGD {
             - Insert: Personajeobjeto
      */
     
-    //Habilidades 
+    //Habilidades leer
     public Habilidad leerHabilidad (Integer idHabilidad) throws ExcepcionGD{
         conectarBD();
         Habilidad habilidad = null;
@@ -97,8 +97,8 @@ public class CADGD {
     }
 
     
-    //Personaje
-    public Integer ModificarPersonaje (Integer idPersonaje, Personaje personaje) throws ExcepcionGD{
+    //Personaje modificar
+    public Integer ModificarPersonaje (Integer idUsuario, Personaje personaje) throws ExcepcionGD{
         conectarBD();
         int registrosAfectados = 0;
 
@@ -115,7 +115,7 @@ public class CADGD {
             sentenciaPreparada.setObject(6, personaje.getPersonajeArma().getArmaId(), java.sql.Types.INTEGER);
             sentenciaPreparada.setObject(7, personaje.getPersonajeArmadura().getArmaduraId(), java.sql.Types.INTEGER);
             sentenciaPreparada.setObject(8, personaje.getPersonajePiso().getPisoId(), java.sql.Types.INTEGER);
-            sentenciaPreparada.setObject(9, idPersonaje, java.sql.Types.INTEGER);
+            sentenciaPreparada.setObject(9, idUsuario, java.sql.Types.INTEGER);
             
             registrosAfectados = sentenciaPreparada.executeUpdate();
 
@@ -151,7 +151,7 @@ public class CADGD {
     }
     
     
-    //Personajeobjeto
+    //Personajeobjeto insertar
     public Integer insertarPersonajeObjeto(Personajeobjeto personajeObjeto) throws ExcepcionGD {
         conectarBD();
         int registrosAfectados = 0;
@@ -201,6 +201,40 @@ public class CADGD {
         return registrosAfectados;
     }
     
+    //Persobaje Delete
+    public Integer eliminarPersonaje(Integer idUsuario) throws ExcepcionGD {
+        int registrosAfectados = 0;
+        String dml = "";
+        try {
+            conectarBD();
+            Statement sentencia = conexion.createStatement();
+            dml = "delete PERSONAJE where ID_USUARIO = " + idUsuario;
+            registrosAfectados = sentencia.executeUpdate(dml);
+            sentencia.close();
+            conexion.close();
+        } catch (SQLException ex) {
+
+            ExcepcionGD e = new ExcepcionGD();
+
+            switch (ex.getErrorCode()) {
+                case 2292:
+                    e.setMensajeErrorUsuario("No se puede eliminar porque tiene objetos o habilidaddes asociados"); //QUITAR CUANDO PONGAMOS EL ON CASCADE
+                    break;
+                default:
+                    e.setMensajeErrorUsuario("Error general del sistema. Consulte con el administrador");
+                    break;
+            }
+
+            e.setCodigoErrorBD(ex.getErrorCode());
+            e.setMensajeErrorBD(ex.getMessage());
+            e.setSentenciaSQL(dml);
+
+            throw e;
+        }
+
+        return registrosAfectados;
+    }
+
     
     
 
