@@ -35,8 +35,8 @@ public class CADGD {
 
     private void conectarBD() throws ExcepcionGD {
         try {
-            //this.conexion = DriverManager.getConnection("jdbc:oracle:thin:@172.16.210.1:1521:TEST", "GODSBATTLE", "kk"); //--> CLASE
-            this.conexion = DriverManager.getConnection("jdbc:oracle:thin:@192.168.18.210:1521:test", "GD", "kk"); //--> CASA
+            this.conexion = DriverManager.getConnection("jdbc:oracle:thin:@172.16.210.1:1521:TEST", "GODSBATTLE", "kk"); //--> CLASE
+            //this.conexion = DriverManager.getConnection("jdbc:oracle:thin:@192.168.18.210:1521:test", "GD", "kk"); //--> CASA
             
         } catch (SQLException ex) {
             ExcepcionGD e = new ExcepcionGD();
@@ -53,6 +53,33 @@ public class CADGD {
             - Update: Personajeobjeto
             - Insert: Personjahabilidad
      */
+    
+    
+    public Integer eliminarUsuario(Integer idUsuario) throws ExcepcionGD
+    {
+        Integer registrosAfectados = 0;
+        String dml = "DELETE USUARIO where ID_USUARIO = " + idUsuario;
+                
+        try
+        {
+            conectarBD();
+            Statement sentencia = conexion.createStatement();
+            registrosAfectados = sentencia.executeUpdate(dml);
+            sentencia.close();
+            conexion.close();
+        }
+        catch (SQLException ex)
+        {
+            ExcepcionGD e = new ExcepcionGD();
+            e.setCodigoErrorBD(ex.getErrorCode());
+            e.setMensajeErrorBD(ex.getMessage());
+            e.setSentenciaSQL(dml);
+            e.setMensajeErrorUsuario("Error general del sistema. Consulte con el administrador");
+           
+            throw e;
+        }
+        return registrosAfectados;
+    }
     
     
     
