@@ -37,7 +37,7 @@ public class CADGD {
         try {
             this.conexion = DriverManager.getConnection("jdbc:oracle:thin:@172.16.210.1:1521:TEST", "GODSBATTLE", "kk"); //--> CLASE
             //this.conexion = DriverManager.getConnection("jdbc:oracle:thin:@192.168.18.210:1521:test", "GD", "kk"); //--> CASA
-            
+           
         } catch (SQLException ex) {
             ExcepcionGD e = new ExcepcionGD();
             e.setCodigoErrorBD(ex.getErrorCode());
@@ -53,7 +53,6 @@ public class CADGD {
             - Update: Personajeobjeto
             - Insert: Personjahabilidad
      */
-    
     
     public Integer eliminarUsuario(Integer idUsuario) throws ExcepcionGD
     {
@@ -80,32 +79,29 @@ public class CADGD {
         }
         return registrosAfectados;
     }
-    
-    
-    
- /* Marina:
+
+    /* Marina:
             - Delete: Usuario
             - Select: Habilidades
             - Update: Personaje
             - Insert: Personajeobjeto
      */
-    
     //Habilidades leer
-    public Habilidad leerHabilidad (Integer idHabilidad) throws ExcepcionGD{
+    public Habilidad leerHabilidad(Integer idHabilidad) throws ExcepcionGD {
         conectarBD();
         Habilidad habilidad = null;
 
-        String dml = "select * from HABILIDAD where ID_HABILIDAD = "+idHabilidad;
+        String dml = "select * from HABILIDAD where ID_HABILIDAD = " + idHabilidad;
 
         try {
             Statement sentencia = conexion.createStatement();
             ResultSet resultado = sentencia.executeQuery(dml);
-            
+
             if (resultado.next()) {
                 habilidad = new Habilidad();
                 habilidad.setHabilidadNombre(resultado.getString("NOMBRE"));
                 habilidad.setHabilidadDescripcion(resultado.getString("DESCRIPCION"));
-                habilidad.setHabilidadPrecio(resultado.getInt("PRECIO"));       
+                habilidad.setHabilidadPrecio(resultado.getInt("PRECIO"));
             }
 
             resultado.close();
@@ -120,20 +116,19 @@ public class CADGD {
             throw exGD;
         }
 
-        return habilidad;  
+        return habilidad;
     }
 
-    
     //Personaje modificar
-    public Integer ModificarPersonaje (Integer idUsuario, Personaje personaje) throws ExcepcionGD{
+    public Integer ModificarPersonaje(Integer idUsuario, Personaje personaje) throws ExcepcionGD {
         conectarBD();
         int registrosAfectados = 0;
 
         String dml = "update PERSONAJE set NOMBRE = ?, VIDA_MAXIMA = ?, DANO_BASE = ?, DEFENSA_BASE = ?, "
                 + "DINERO = ?, ID_ARMA = ?, ID_ARMADURA = ?, ID_PISO = ? where ID_USUARIO = ?";
-          try {
+        try {
             PreparedStatement sentenciaPreparada = conexion.prepareStatement(dml);
-            
+
             sentenciaPreparada.setString(1, personaje.getPersonajeNombre());
             sentenciaPreparada.setObject(2, personaje.getPersonajeVidaMaxima(), java.sql.Types.INTEGER);
             sentenciaPreparada.setObject(3, personaje.getPersonajeDanoBase(), java.sql.Types.INTEGER);
@@ -143,7 +138,7 @@ public class CADGD {
             sentenciaPreparada.setObject(7, personaje.getPersonajeArmadura().getArmaduraId(), java.sql.Types.INTEGER);
             sentenciaPreparada.setObject(8, personaje.getPersonajePiso().getPisoId(), java.sql.Types.INTEGER);
             sentenciaPreparada.setObject(9, idUsuario, java.sql.Types.INTEGER);
-            
+
             registrosAfectados = sentenciaPreparada.executeUpdate();
 
             sentenciaPreparada.close();
@@ -157,7 +152,7 @@ public class CADGD {
             exGD.setSentenciaSQL(dml);
 
             switch (ex.getErrorCode()) {
-               case 2290:
+                case 2290:
                     exGD.setMensajeErrorUsuario("La vida maxima, el daño base, la defensa base y el dinero no pueden ser negativos.");
                     break;
                 case 2291:
@@ -176,8 +171,7 @@ public class CADGD {
         }
         return registrosAfectados;
     }
-    
-    
+
     //Personajeobjeto insertar
     public Integer insertarPersonajeObjeto(Personajeobjeto personajeObjeto) throws ExcepcionGD {
         conectarBD();
@@ -190,7 +184,7 @@ public class CADGD {
             sentencia.setObject(1, personajeObjeto.getPersonajeObjetoIdUsuario().getPersonajeIdUsuario().getUsuarioIdUsuario(), java.sql.Types.INTEGER);
             sentencia.setObject(2, personajeObjeto.getPersonajeObjetoIdObjeto().getObjetoIdObjeto(), java.sql.Types.INTEGER);
             sentencia.setObject(3, personajeObjeto.getPersonajeObjetoUsosRestantes(), java.sql.Types.INTEGER);
-           
+
             registrosAfectados = sentencia.executeUpdate();
 
             sentencia.close();
@@ -201,14 +195,14 @@ public class CADGD {
             exGD.setCodigoErrorBD(ex.getErrorCode());
             exGD.setMensajeErrorBD(ex.getMessage());
             exGD.setSentenciaSQL(dml);
-            
+
             switch (ex.getErrorCode()) {
-                case 2290: 
+                case 2290:
                     exGD.setMensajeErrorUsuario("Los usos restantes no pueden ser menores que 0.");
                     break;
                 case 2291:
                     exGD.setMensajeErrorUsuario("El objeto o el usuario seleccionados no existen.");
-                    break;                  
+                    break;
                 case 1407:
                     exGD.setMensajeErrorUsuario("Todos los campos son obligatorios.");
                     break;
@@ -225,7 +219,7 @@ public class CADGD {
 
         return registrosAfectados;
     }
-    
+
     //Persobaje Delete
     public Integer eliminarPersonaje(Integer idUsuario) throws ExcepcionGD {
         int registrosAfectados = 0;
@@ -244,7 +238,6 @@ public class CADGD {
             exGD.setMensajeErrorBD(ex.getMessage());
             exGD.setSentenciaSQL(dml);
 
-
             switch (ex.getErrorCode()) {
                 case 2292:
                     exGD.setMensajeErrorUsuario("No se puede eliminar porque tiene objetos o habilidaddes asociados"); //QUITAR CUANDO PONGAMOS EL ON CASCADE
@@ -259,33 +252,24 @@ public class CADGD {
         return registrosAfectados;
     }
 
-    
-    
-
     /* Kevin
             - Delete: Personajeobjeto
             - Select: Personaje
             - Update: Configuracion
             - Insert: Usuario
      */
-    
-    
-    
-/* Simón
+ /* Simón
             ######- Delete: PersonajeHabilidad
             ######- Select: Enemigo
             ######- Update: Usuario   
             ######- Insert: Personaje
      */
-    
-    
     //Select de Enemigo:
-    
     public Enemigo leerEnemigo(Integer idEnemigo) throws ExcepcionGD {
-    conectarBD();
-    Enemigo enemigo = null;
+        conectarBD();
+        Enemigo enemigo = null;
 
-    String dml = "select * from ENEMIGO where ID_ENEMIGO = " + idEnemigo;
+        String dml = "select * from ENEMIGO where ID_ENEMIGO = " + idEnemigo;
 
         try {
             Statement sentencia = conexion.createStatement();
@@ -316,25 +300,24 @@ public class CADGD {
 
         return enemigo;
     }
-    
-    //Insert de Personaje:
-    
-    public void insertarPersonaje(Personaje personaje) throws ExcepcionGD {
-    conectarBD();
 
-    String dml = "INSERT INTO PERSONAJE "
-            + "(ID_USUARIO, NOMBRE, VIDA_MAXIMA, DANO_BASE, DEFENSA_BASE, DINERO, ID_ARMA, ID_ARMADURA, ID_PISO) "
-            + "VALUES ("
-            + personaje.getPersonajeIdUsuario().getUsuarioIdUsuario() + ", '"
-            + personaje.getPersonajeNombre() + "', "
-            + personaje.getPersonajeVidaMaxima() + ", "
-            + personaje.getPersonajeDanoBase() + ", "
-            + personaje.getPersonajeDefensaBase() + ", "
-            + personaje.getPersonajeDinero() + ", "
-            + personaje.getPersonajeArma().getArmaId() + ", "
-            + personaje.getPersonajeArmadura().getArmaduraId() + ", "
-            + personaje.getPersonajePiso().getPisoId()
-            + ")";
+    //Insert de Personaje:
+    public void insertarPersonaje(Personaje personaje) throws ExcepcionGD {
+        conectarBD();
+
+        String dml = "INSERT INTO PERSONAJE "
+                + "(ID_USUARIO, NOMBRE, VIDA_MAXIMA, DANO_BASE, DEFENSA_BASE, DINERO, ID_ARMA, ID_ARMADURA, ID_PISO) "
+                + "VALUES ("
+                + personaje.getPersonajeIdUsuario().getUsuarioIdUsuario() + ", '"
+                + personaje.getPersonajeNombre() + "', "
+                + personaje.getPersonajeVidaMaxima() + ", "
+                + personaje.getPersonajeDanoBase() + ", "
+                + personaje.getPersonajeDefensaBase() + ", "
+                + personaje.getPersonajeDinero() + ", "
+                + personaje.getPersonajeArma().getArmaId() + ", "
+                + personaje.getPersonajeArmadura().getArmaduraId() + ", "
+                + personaje.getPersonajePiso().getPisoId()
+                + ")";
 
         try {
             Statement sentencia = conexion.createStatement();
@@ -352,16 +335,15 @@ public class CADGD {
             throw exHR;
         }
     }
-    
-    
-    //Update de Usuario:
-    
-    public Integer ModificarUsuario(Integer idUsuario, Usuario usuario) throws ExcepcionGD {
-    conectarBD();
-    int registrosAfectados = 0;
 
-    String dml = "UPDATE USUARIO SET NOMBRE = ?, CORREO = ?, CONTRASENA = ?, ID_ROL = ? "
-               + "WHERE ID_USUARIO = ?";
+    //Update de Usuario:
+    public Integer ModificarUsuario(Integer idUsuario, Usuario usuario) throws ExcepcionGD {
+        conectarBD();
+
+        int registrosAfectados = 0;
+
+        String dml = "UPDATE USUARIO SET NOMBRE = ?, CORREO = ?, CONTRASENA = ?, ID_ROL = ? "
+                + "WHERE ID_USUARIO = ?";
 
         try {
             PreparedStatement sentenciaPreparada = conexion.prepareStatement(dml);
@@ -403,14 +385,12 @@ public class CADGD {
         return registrosAfectados;
     }
 
-    
     //Delete de PersonajeHabilidad:
-    
     public Integer eliminarPersonajeHabilidad(Personajehabilidad ph) throws ExcepcionGD {
-    conectarBD();
-    int registrosAfectados = 0;
+        conectarBD();
+        int registrosAfectados = 0;
 
-    String dml = "DELETE FROM PERSONAJEHABILIDAD WHERE ID_USUARIO = ? AND ID_HABILIDAD = ?";
+        String dml = "DELETE FROM PERSONAJEHABILIDAD WHERE ID_USUARIO = ? AND ID_HABILIDAD = ?";
 
         try {
             PreparedStatement sentenciaPreparada = conexion.prepareStatement(dml);
