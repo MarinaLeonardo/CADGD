@@ -85,12 +85,12 @@ public class CADGD {
             sentencia.close();
             conexion.close();
         } catch (SQLException ex) {
-            ExcepcionGD exHR = new ExcepcionGD();
-            exHR.setCodigoErrorBD(ex.getErrorCode());
-            exHR.setMensajeErrorBD(ex.getMessage());
-            exHR.setSentenciaSQL(dml);
-            exHR.setMensajeErrorUsuario("Error general del sistema. Consulte con el administrador.");
-            throw exHR;
+            ExcepcionGD exGD = new ExcepcionGD();
+            exGD.setCodigoErrorBD(ex.getErrorCode());
+            exGD.setMensajeErrorBD(ex.getMessage());
+            exGD.setSentenciaSQL(dml);
+            exGD.setMensajeErrorUsuario("Error general del sistema. Consulte con el administrador.");
+            throw exGD;
         }
 
         return habilidad;  
@@ -124,28 +124,28 @@ public class CADGD {
 
         } catch (SQLException ex) {
 
-            ExcepcionGD e = new ExcepcionGD();
-            e.setCodigoErrorBD(ex.getErrorCode());
-            e.setMensajeErrorBD(ex.getMessage());
-            e.setSentenciaSQL(dml);
+            ExcepcionGD exGD = new ExcepcionGD();
+            exGD.setCodigoErrorBD(ex.getErrorCode());
+            exGD.setMensajeErrorBD(ex.getMessage());
+            exGD.setSentenciaSQL(dml);
 
             switch (ex.getErrorCode()) {
                case 2290:
-                    e.setMensajeErrorUsuario("La vida maxima, el daño base, la defensa base y el dinero no pueden ser negativos.");
+                    exGD.setMensajeErrorUsuario("La vida maxima, el daño base, la defensa base y el dinero no pueden ser negativos.");
                     break;
                 case 2291:
-                    e.setMensajeErrorUsuario("El usuario, el arma, la armadura o el piso no existen.");
+                    exGD.setMensajeErrorUsuario("El usuario, el arma, la armadura o el piso no existen.");
                     break;
                 case 1407:
-                    e.setMensajeErrorUsuario("Todos los campos son obligatorios excepto el arma y la armadura.");
+                    exGD.setMensajeErrorUsuario("Todos los campos son obligatorios excepto el arma y la armadura.");
                     break;
                 case 1:
-                    e.setMensajeErrorUsuario("Este usuario ya tiene vinculado el mismo objeto, no se permite tener los objetos duplicados.");
+                    exGD.setMensajeErrorUsuario("Este usuario ya tiene vinculado el mismo objeto, no se permite tener los objetos duplicados.");
                     break;
                 default:
-                    e.setMensajeErrorUsuario("Error general del sistema. Consulte con el admiinistrador.");
+                    exGD.setMensajeErrorUsuario("Error general del sistema. Consulte con el admiinistrador.");
             }
-            throw e;
+            throw exGD;
         }
         return registrosAfectados;
     }
@@ -170,29 +170,27 @@ public class CADGD {
             conexion.close();
 
         } catch (SQLException ex) {
-            ExcepcionGD e = new ExcepcionGD();
-
-            e.setCodigoErrorBD(ex.getErrorCode());
-            e.setMensajeErrorBD(ex.getMessage());
-            e.setSentenciaSQL(dml);
+            ExcepcionGD exGD = new ExcepcionGD();
+            exGD.setCodigoErrorBD(ex.getErrorCode());
+            exGD.setMensajeErrorBD(ex.getMessage());
+            exGD.setSentenciaSQL(dml);
             
             switch (ex.getErrorCode()) {
                 case 2290: 
-                    e.setMensajeErrorUsuario("Los usos restantes no pueden ser menores que 0.");
+                    exGD.setMensajeErrorUsuario("Los usos restantes no pueden ser menores que 0.");
                     break;
                 case 2291:
-                    e.setMensajeErrorUsuario("El objeto o el usuario seleccionados no existen.");
-                    break;
-                    
+                    exGD.setMensajeErrorUsuario("El objeto o el usuario seleccionados no existen.");
+                    break;                  
                 case 1407:
-                    e.setMensajeErrorUsuario("Todos los campos son obligatorios.");
+                    exGD.setMensajeErrorUsuario("Todos los campos son obligatorios.");
                     break;
                 default:
-                    e.setMensajeErrorUsuario("Error general del sistema. Consulte con el administrador.");
+                    exGD.setMensajeErrorUsuario("Error general del sistema. Consulte con el administrador.");
                     break;
             }
 
-            throw e;
+            throw exGD;
         } catch (Exception e) {
             System.out.println(e);
 
@@ -214,22 +212,21 @@ public class CADGD {
             conexion.close();
         } catch (SQLException ex) {
 
-            ExcepcionGD e = new ExcepcionGD();
+            ExcepcionGD exGD = new ExcepcionGD();
+            exGD.setCodigoErrorBD(ex.getErrorCode());
+            exGD.setMensajeErrorBD(ex.getMessage());
+            exGD.setSentenciaSQL(dml);
+
 
             switch (ex.getErrorCode()) {
                 case 2292:
-                    e.setMensajeErrorUsuario("No se puede eliminar porque tiene objetos o habilidaddes asociados"); //QUITAR CUANDO PONGAMOS EL ON CASCADE
+                    exGD.setMensajeErrorUsuario("No se puede eliminar porque tiene objetos o habilidaddes asociados"); //QUITAR CUANDO PONGAMOS EL ON CASCADE
                     break;
                 default:
-                    e.setMensajeErrorUsuario("Error general del sistema. Consulte con el administrador");
+                    exGD.setMensajeErrorUsuario("Error general del sistema. Consulte con el administrador");
                     break;
             }
-
-            e.setCodigoErrorBD(ex.getErrorCode());
-            e.setMensajeErrorBD(ex.getMessage());
-            e.setSentenciaSQL(dml);
-
-            throw e;
+            throw exGD;
         }
 
         return registrosAfectados;
