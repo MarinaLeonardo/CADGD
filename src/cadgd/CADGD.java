@@ -35,8 +35,9 @@ public class CADGD {
 
     private void conectarBD() throws ExcepcionGD {
         try {
-            //this.conexion = DriverManager.getConnection("jdbc:oracle:thin:@172.16.210.1:1521:TEST", "GODSBATTLE", "kk"); //--> CLASE
-            this.conexion = DriverManager.getConnection("jdbc:oracle:thin:@192.168.18.210:1521:test", "GD", "kk"); //--> CASA
+            //this.conexion = DriverManager.getConnection("jdbc:oracle:thin:@172.16.XXX.1:1521:TEST", "GODSBATTLE", "kk"); //--> CLASE
+            //this.conexion = DriverManager.getConnection("jdbc:oracle:thin:@192.168.X.X:1521:TEST", "GD", "kk"); //--> CASA
+            this.conexion = DriverManager.getConnection("jdbc:oracle:thin:@172.16.203.1:1521:TEST", "GODSBATTLE", "kk");
             
         } catch (SQLException ex) {
             ExcepcionGD e = new ExcepcionGD();
@@ -54,6 +55,37 @@ public class CADGD {
             - Insert: Personjahabilidad
      */
     
+    // Eliminar personaje
+    public Integer eliminarUsuario(Integer idUsuario) throws ExcepcionGD
+    {
+        int registrosAfectados = 0;
+        String dml = "DELETE * FROM Personaje where ID_USUARIO = " + idUsuario;
+                
+        try
+        {
+            conectarBD();
+            Statement sentencia = conexion.createStatement();
+            sen
+        }
+        catch (SQLException ex)
+        {
+            ExcepcionGD e = new ExcepcionGD();
+            e.setCodigoErrorBD(ex.getErrorCode());
+            e.setMensajeErrorBD(ex.getMessage());
+            e.setSentenciaSQL(dml);
+            
+            switch (ex.getErrorCode()) 
+            {
+                default:
+                    e.setMensajeErrorUsuario("Error general del sistema. Consulte con el administrador");
+                break;
+            }
+            throw e;
+        }
+        
+        return registrosAfectados;
+        
+    }
     
     
  /* Marina:
@@ -201,7 +233,7 @@ public class CADGD {
         return registrosAfectados;
     }
     
-    //Persobaje Delete
+    //Personaje Delete
     public Integer eliminarPersonaje(Integer idUsuario) throws ExcepcionGD {
         int registrosAfectados = 0;
         String dml = "";
