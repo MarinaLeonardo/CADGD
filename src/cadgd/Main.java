@@ -25,16 +25,16 @@ public class Main
         Piso pi = new Piso();
         pi.setPisoId(1);
         
-        Personaje p = new Personaje();
-        p.setPersonajeIdUsuario(u); 
-        p.setPersonajeNombre("Paco");
-        p.setPersonajeVidaMaxima(30);
-        p.setPersonajeDanoBase(33);
-        p.setPersonajeDefensaBase(33);
-        p.setPersonajeDinero(33);
-        p.setPersonajeArma(a);
-        p.setPersonajeArmadura(ar);
-        p.setPersonajePiso(pi);
+        Personaje personaje = new Personaje();
+        personaje.setPersonajeIdUsuario(u); 
+        personaje.setPersonajeNombre("Simon");
+        personaje.setPersonajeVidaMaxima(30);
+        personaje.setPersonajeDanoBase(33);
+        personaje.setPersonajeDefensaBase(33);
+        personaje.setPersonajeDinero(33);
+        personaje.setPersonajeArma(a);
+        personaje.setPersonajeArmadura(ar);
+        personaje.setPersonajePiso(pi);
 
         Objeto o = new Objeto();
         o.setObjetoIdObjeto(3);
@@ -43,7 +43,7 @@ public class Main
         o.setObjetoUsos(4);
        
         Personajeobjeto po = new Personajeobjeto();
-        po.setPersonajeObjetoIdUsuario(p);
+        po.setPersonajeObjetoIdUsuario(personaje);
         po.setPersonajeObjetoIdObjeto(o);
         po.setPersonajeObjetoUsosRestantes(5);
         
@@ -56,8 +56,10 @@ public class Main
             //System.out.println(cad.ModificarPersonaje(1, p));
 //            System.out.println(cad.insertarPersonajeObjeto(po));
             
-            System.out.println(cad.eliminarPersonaje(1));
+           // System.out.println(cad.leerEnemigo(1));
             
+           
+
             
         } catch (ExcepcionGD ex) {
             System.out.println(ex);
