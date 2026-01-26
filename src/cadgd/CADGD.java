@@ -11,7 +11,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import jdk.internal.org.objectweb.asm.Type;
 import pojosgd.*;
 
 /**
@@ -36,8 +35,8 @@ public class CADGD {
     private void conectarBD() throws ExcepcionGD {
         try {
             //this.conexion = DriverManager.getConnection("jdbc:oracle:thin:@172.16.210.1:1521:TEST", "GODSBATTLE", "kk"); //--> CLASE
-            this.conexion = DriverManager.getConnection("jdbc:oracle:thin:@192.168.18.210:1521:test", "GD", "kk"); //--> CASA
-            
+            //this.conexion = DriverManager.getConnection("jdbc:oracle:thin:@192.168.18.210:1521:test", "GD", "kk"); //--> CASA
+            this.conexion = DriverManager.getConnection("jdbc:oracle:thin:@172.16.203.1:1521:test", "GodsBattle", "kk");
         } catch (SQLException ex) {
             ExcepcionGD e = new ExcepcionGD();
             e.setCodigoErrorBD(ex.getErrorCode());
@@ -54,7 +53,31 @@ public class CADGD {
             - Insert: Personjahabilidad
      */
     
-    
+    public Integer eliminarUsuario(Integer idUsuario) throws ExcepcionGD
+    {
+        Integer registrosAfectados = 0;
+        String dml = "DELETE USUARIO where ID_USUARIO = " + idUsuario;
+                
+        try
+        {
+            conectarBD();
+            Statement sentencia = conexion.createStatement();
+            registrosAfectados = sentencia.executeUpdate(dml);
+            sentencia.close();
+            conexion.close();
+        }
+        catch (SQLException ex)
+        {
+            ExcepcionGD e = new ExcepcionGD();
+            e.setCodigoErrorBD(ex.getErrorCode());
+            e.setMensajeErrorBD(ex.getMessage());
+            e.setSentenciaSQL(dml);
+            e.setMensajeErrorUsuario("Error general del sistema. Consulte con el administrador");
+           
+            throw e;
+        }
+        return registrosAfectados;
+    }
     
  /* Marina:
             - Delete: Usuario
