@@ -57,8 +57,8 @@ public class Main
 //            System.out.println(cad.insertarPersonajeObjeto(po));
             
            // System.out.println(cad.leerEnemigo(1));
+            System.out.println(cad.eliminarPersonaje(1));
             
-           
 
             
         } catch (ExcepcionGD ex) {
