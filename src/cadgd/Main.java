@@ -17,7 +17,16 @@ public class Main
     public static void main(String[] args) 
     {
         Usuario u = new Usuario();
-        u.setUsuarioIdUsuario(2);
+        u.setUsuarioIdUsuario(1);
+        u.setUsuarioContrasena("kk");
+        u.setUsuarioNombre("Roberto");
+        u.setUsuarioCorreo("juan@mail.com");
+        
+        Rol r = new Rol();
+        r.setRolIdRol(1);
+        r.setRolNombre("Usuario");
+        u.setUsuarioIdRol(r);
+        
         Arma a = new Arma();
         a.setArmaId(1);
         Armadura ar = new Armadura();
@@ -56,8 +65,9 @@ public class Main
            // System.out.println(cad.ModificarPersonaje(1, personaje));
 //            System.out.println(cad.insertarPersonajeObjeto(po));
             
-           //System.out.println(cad.leerEnemigo(1));
-           System.out.println(cad.eliminarPersonaje(1));
+           System.out.println(cad.leerEnemigo(1));
+           //System.out.println(cad.insertarPersonaje(personaje));
+            System.out.println(cad.ModificarUsuario(1, u));
             
 
             
